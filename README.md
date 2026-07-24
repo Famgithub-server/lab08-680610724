@@ -13,7 +13,6 @@
 ---
 
 ### Current API
-
 **Route Handlers**
 
 - `/api/v2/students` : CRUD API for Students data (in-memory DB)
