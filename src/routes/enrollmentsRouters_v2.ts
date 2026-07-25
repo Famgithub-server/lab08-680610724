@@ -16,23 +16,32 @@ const router = Router();
 // /api/v2/enrollments
 router.delete("/", (req: Request, res: Response) => {
   try {
-    const studentId = req.body.studentId;
-    const courseId = req.body.courseId;
+    const pstudentId = zStudentId.safeParse(req.body.studentId);
+    const pcourseId = zCourseId.safeParse(req.body.courseId);
 
-    const idx = enrollments.findIndex((e) => e.courseId == courseId && e.studentId == studentId);
+    if (pstudentId.success && pcourseId.success) {
+      const studentId = pstudentId.data;
+      const courseId = pcourseId.data;
+      const idx = enrollments.findIndex((e) => e.courseId == Number(courseId) && e.studentId == studentId);
 
-    if (idx != -1) {
-      enrollments.splice(idx, 1);
-      return res.status(200).json({
-        ok: true,
-        message: "Enrollment has been deleted",
-      });
+      if (idx != -1) {
+        enrollments.splice(idx, 1);
+        return res.status(200).json({
+          ok: true,
+          message: "Enrollment has been deleted",
+        });
+      } else {
+        return res.status(404).json({
+          ok: false,
+          message: "Enrollment does not exist",
+        });
+      }
     } else {
-      return res.status(404).json({
-        ok: false,
-        message: "Enrollment does not exist",
-      });
-    }
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+      })
+    } 
   } catch (e) {
     return res.status(500).json({
       ok: false,
