@@ -19,7 +19,7 @@ router.delete("/", (req: Request, res: Response) => {
     const studentId = req.body.studentId;
     const courseId = req.body.courseId;
 
-    const idx = enrollments.findIndex((e) => e.courseId == Number(courseId) && e.studentId == studentId);
+    const idx = enrollments.findIndex((e) => e.courseId == courseId && e.studentId == studentId);
 
     if (idx != -1) {
       enrollments.splice(idx, 1);
